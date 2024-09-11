@@ -1,0 +1,26 @@
+const int sensorPin = A0;
+const int buzzerPin = 8;
+
+const int threshold = 400;
+
+void setup() {
+  pinMode(buzzerPin, OUTPUT); 
+  Serial.begin(9600);   
+}
+
+void loop() {
+  int sensorValue = analogRead(sensorPin); // Leer valor del sensor MQ-4
+  
+  Serial.print("Valor del sensor: ");
+  Serial.println(sensorValue); 
+
+  if (sensorValue > threshold) {
+    digitalWrite(buzzerPin, HIGH);
+    Serial.println("¡Alarma activada!");
+  } else {
+    digitalWrite(buzzerPin, LOW); 
+    Serial.println("Nivel de metano normal.");
+  }
+
+  delay(1000); 
+}
