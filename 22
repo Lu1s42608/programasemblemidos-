@@ -1,0 +1,31 @@
+const int ledPin = 13;          // Pin del LED
+const int pirPin = 7;           // Pin de salida del sensor PIR
+unsigned long ledOnTime = 0;    // Tiempo en el que el LED se encendió
+bool ledState = false;          // Estado actual del LED
+bool motionDetected = false;    // Indicador de detección de movimiento
+
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(pirPin, INPUT);
+  digitalWrite(ledPin, LOW);   // Asegurarse de que el LED esté apagado al principio
+}
+
+void loop() {
+  // Leer el valor del sensor PIR
+  motionDetected = digitalRead(pirPin);
+
+  if (motionDetected) {
+    // Si se detecta movimiento, enciende el LED y guarda el tiempo actual
+    if (!ledState) {
+      digitalWrite(ledPin, HIGH);
+      ledState = true;
+      ledOnTime = millis(); // Guardar el tiempo en que el LED se encendió
+    }
+  } else {
+    // Si no se detecta movimiento, verificar si el LED debería apagarse
+    if (ledState && (millis() - ledOnTime >= 300000)) { // 300000 ms = 5 minutos
+      digitalWrite(ledPin, LOW);
+      ledState = false;
+    }
+  }
+}
