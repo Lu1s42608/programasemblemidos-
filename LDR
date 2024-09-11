@@ -1,0 +1,32 @@
+#include <Servo.h>
+
+const int ldrPin = A0;      // Pin analógico al que está conectado el LDR
+const int servoPin = 9;     // Pin del servo motor
+
+Servo myServo;              // Crear un objeto Servo
+int ldrValue;               // Valor leído del LDR
+
+void setup() {
+  myServo.attach(servoPin); // Conectar el servo al pin especificado
+}
+
+void loop() {
+  ldrValue = analogRead(ldrPin); // Leer el valor del LDR
+
+  // Convertir el valor del LDR a un ángulo del servo
+  int angle;
+  if (ldrValue < 200) {
+    angle = 0; // Medianoche (poca luz)
+  } else if (ldrValue < 400) {
+    angle = 45; // Amanecer
+  } else if (ldrValue < 600) {
+    angle = 90; // Mediodía
+  } else if (ldrValue < 800) {
+    angle = 135; // Atardecer
+  } else {
+    angle = 180; // Medianoche (mucha luz)
+  }
+
+  myServo.write(angle); // Mover el servo al ángulo calculado
+  delay(1000); // Esperar 1 segundo antes de leer nuevamente
+}
